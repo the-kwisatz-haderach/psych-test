@@ -1,0 +1,138 @@
+body {
+  margin: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+main {
+  border: 1px solid lightgray;
+  display: flex;
+  flex-direction: column;
+  max-width: 1000px;
+  max-height: 700px;
+  margin: auto;
+  height: 100%;
+  width: 100%;
+}
+
+.wrapper {
+  max-width: 600px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+}
+
+.start-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  background-color: gainsboro;
+}
+
+form {
+  width: 100%;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background-color: white;
+}
+
+span {
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+input {
+  width: 50px;
+}
+
+.symbol {
+  font-size: 100px;
+  display: inline-block;
+  height: fit-content;
+}
+
+.target {
+  height: 100%;
+  width: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  gap: 1rem;
+}
+
+.hide {
+  display: none;
+}
+
+.target > div {
+  display: none;
+}
+
+.target.show > div {
+  display: initial;
+}
+
+.fixation {
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+
+.reverse {
+  transform: rotate(180deg);
+}
+
+.fixation::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100px;
+  height: 2px;
+  background-color: black;
+  transform: translateX(-50px);
+}
+
+.fixation::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 2px;
+  height: 100px;
+  background-color: black;
+  transform: translateY(-50px);
+}
+
+table {
+  border-collapse: collapse;
+}
+
+th,
+td,
+tr,
+table {
+  border: 1px solid grey;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 4px 8px;
+}
