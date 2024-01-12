@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="/public/style.css" rel="stylesheet" />
+    <script type="module" defer src="/public/index.mjs"></script>
+    <title>Document</title>
+  </head>
+
+  <body>
+    <a href="/login">Sign In</a>
+    <div class="start-page">
+      <div class="wrapper">
+        <form>
+          <span>
+            <label for="cueDuration">Cue duration (ms)</label>
+            <input
+              id="cueDuration"
+              name="cueDuration"
+              type="number"
+              min="400"
+              step="100"
+              max="800"
+              value="400"
+            />
+          </span>
+          <span>
+            <label for="fixationDuration">Fixation duration (ms)</label>
+            <input
+              id="fixationDuration"
+              name="fixationDuration"
+              type="number"
+              step="100"
+              min="400"
+              max="1600"
+              value="400"
+            />
+          </span>
+          <span>
+            <label for="testDuration">Test duration (ms)</label>
+            <input
+              id="testDuration"
+              name="testDuration"
+              type="number"
+              step="100"
+              min="5000"
+              max="120000"
+              value="5000"
+            />
+          </span>
+          <span>
+            <label for="withCue">With cue</label>
+            <input id="withCue" name="withCue" type="checkbox" />
+          </span>
+          <button type="submit">Start</button>
+        </form>
+        <div class="results-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Duration</th>
+                <th>Correct</th>
+                <th>Direction</th>
+                <th>Condition</th>
+                <th>Cue</th>
+              </tr>
+            </thead>
+            <tbody id="results"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <main>
+      <div id="top" class="target"></div>
+      <div id="center" class="target fixation"></div>
+      <div id="bottom" class="target"></div>
+    </main>
+  </body>
+</html>
