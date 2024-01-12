@@ -9,6 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/the-kwisatz-haderach/psych-test/m/internal/authenticator"
 	"github.com/the-kwisatz-haderach/psych-test/m/internal/controllers"
+	"github.com/the-kwisatz-haderach/psych-test/m/internal/middleware"
 )
 
 // New registers the routes and returns the router.
@@ -32,6 +33,7 @@ func New(auth *authenticator.Authenticator) *gin.Engine {
 	router.GET("/login", controllers.HandleLogin(auth))
 	router.GET("/callback", controllers.HandleCallback(auth))
 	router.GET("/logout", controllers.HandleLogout)
+	router.GET("/user", middleware.IsAuthenticated, controllers.HandleUser)
 
 	return router
 }
