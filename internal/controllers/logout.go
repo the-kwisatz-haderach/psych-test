@@ -5,6 +5,7 @@ import (
 	"net/url"
 	"os"
 
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 )
 
@@ -31,6 +32,11 @@ func HandleLogout(ctx *gin.Context) {
 	parameters.Add("returnTo", returnTo.String())
 	parameters.Add("client_id", os.Getenv("AUTH0_CLIENT_ID"))
 	logoutUrl.RawQuery = parameters.Encode()
+
+	session := sessions.Default(ctx)
+	session.Clear()
+	session.Options(sessions.Options{Path: "/", MaxAge: -1}) // this sets the cookie with a MaxAge of 0
+	session.Save()
 
 	ctx.Redirect(http.StatusTemporaryRedirect, logoutUrl.String())
 }

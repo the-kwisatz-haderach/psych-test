@@ -2,7 +2,13 @@ package router
 
 import (
 	"encoding/gob"
+	"fmt"
+	"log"
 	"net/http"
+	"os"
+	"path/filepath"
+	"regexp"
+	"strings"
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
@@ -11,6 +17,8 @@ import (
 	"github.com/the-kwisatz-haderach/psych-test/m/internal/controllers"
 	"github.com/the-kwisatz-haderach/psych-test/m/internal/middleware"
 )
+
+const staticFolder = "web/build"
 
 // New registers the routes and returns the router.
 func New(auth *authenticator.Authenticator) *gin.Engine {
@@ -23,9 +31,14 @@ func New(auth *authenticator.Authenticator) *gin.Engine {
 	store := cookie.NewStore([]byte("secret"))
 	router.Use(sessions.Sessions("auth-session", store))
 
-	// router.Static("/public", "web/static")
-	router.Static("/public", "web/static")
-	router.LoadHTMLGlob("web/template/*")
+	// load templates recursively
+	files, err := loadTemplates(staticFolder)
+	if err != nil {
+		log.Println(err)
+	}
+	router.LoadHTMLFiles(files...)
+
+	router.Static("/_app", "./"+staticFolder+"/_app")
 
 	router.GET("/", func(ctx *gin.Context) {
 		ctx.HTML(http.StatusOK, "index.html", nil)
@@ -35,5 +48,40 @@ func New(auth *authenticator.Authenticator) *gin.Engine {
 	router.GET("/logout", controllers.HandleLogout)
 	router.GET("/user", middleware.IsAuthenticated, controllers.HandleUser)
 
+	router.NoRoute(func(ctx *gin.Context) {
+		r, err := regexp.Compile(`\.\w+$`)
+		if err != nil {
+			log.Println(err)
+			return
+		}
+		_, filename := filepath.Split(ctx.Request.RequestURI)
+		if !r.MatchString(ctx.Request.RequestURI) {
+			ctx.HTML(http.StatusOK, fmt.Sprintf("%s.html", filename), nil)
+		} else {
+			ctx.File(ctx.Request.RequestURI)
+		}
+	})
+
 	return router
+}
+
+func loadTemplates(root string) (files []string, err error) {
+	err = filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		fileInfo, err := os.Stat(path)
+		if err != nil {
+			return err
+		}
+		if fileInfo.IsDir() {
+			if path != root {
+				loadTemplates(path)
+			}
+		} else if strings.HasSuffix(fileInfo.Name(), ".html") {
+			files = append(files, path)
+		}
+		return err
+	})
+	return files, err
 }
