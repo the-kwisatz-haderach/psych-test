@@ -20,17 +20,19 @@
 			...pathname
 				.slice(1)
 				.split('/')
-				.map((path, i, arr) => ({
-					title: path,
+				.map((p, i, arr) => ({
+					title: p.replace('-', ' '),
 					href: '/' + arr.slice(0, i + 1).join('/')
 				}))
 		];
 	};
 </script>
 
-<Breadcrumb aria-label="breadcrumbs">
+<Breadcrumb aria-label="breadcrumbs" navClass="flex h-6 container mx-auto my-4">
 	{#each breadcrumbs as crumb}
 		<BreadcrumbItem
+			spanClass="ms-1 text-sm font-medium text-gray-500 md:ms-2 capitalize-first"
+			linkClass="ms-1 text-sm font-medium text-gray-700 hover:text-gray-900 md:ms-2 capitalize-first"
 			href={crumb.href === currentPath ? undefined : crumb.href}
 			home={crumb.href === '/'}>{crumb.title}</BreadcrumbItem
 		>
