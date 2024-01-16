@@ -1,9 +1,9 @@
 import {
 	createSymbol,
 	wait,
-	initPositionElements,
 	determineElementPosition,
-	setupListener
+	setupListener,
+	initPositionElements
 } from './helpers';
 import type { Condition, Cue, CueDirection, TargetDirection, TestConfig } from './types';
 
@@ -38,9 +38,9 @@ export async function init({
 	testDuration = 20,
 	targetMaxTime = 1700
 	// withCue = true,
-}: Partial<TestConfig> = {}) {
-	const results = [];
+}: TestConfig) {
 	const { clearMarkup, ...elements } = initPositionElements();
+	const results = [];
 
 	const generateState = createStateGenerator(testDuration);
 

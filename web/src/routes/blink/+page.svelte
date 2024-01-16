@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { init } from '$lib/init';
+	import { Button, Heading, P, Input, Label, Checkbox } from 'flowbite-svelte';
 
 	let cueDuration = 400;
 	let fixationDuration = 400;
@@ -12,102 +13,95 @@
 
 	const onSubmit = async () => {
 		isRunning = true;
-		results = await init({ cueDuration, fixationDuration, testDuration, withCue });
+		//results = await init({ cueDuration, fixationDuration, testDuration, withCue });
 		isRunning = false;
 	};
 </script>
 
-<div class="container">
-	{#if !isRunning}
-		<div class="start-page">
-			<div class="wrapper">
-				<form on:submit|preventDefault={onSubmit}>
-					<span>
-						<label for="cueDuration">Cue duration (ms)</label>
-						<input
-							bind:value={cueDuration}
-							id="cueDuration"
-							name="cueDuration"
-							type="number"
-							min="400"
-							step="100"
-							max="800"
-						/>
-					</span>
-					<span>
-						<label for="fixationDuration">Fixation duration (ms)</label>
-						<input
-							bind:value={fixationDuration}
-							id="fixationDuration"
-							name="fixationDuration"
-							type="number"
-							step="100"
-							min="400"
-							max="1600"
-						/>
-					</span>
-					<span>
-						<label for="testDuration">Test duration (ms)</label>
-						<input
-							bind:value={testDuration}
-							id="testDuration"
-							name="testDuration"
-							type="number"
-							step="100"
-							min="5000"
-							max="120000"
-						/>
-					</span>
-					<span>
-						<label for="withCue">With cue</label>
-						<input bind:checked={withCue} id="withCue" name="withCue" type="checkbox" />
-					</span>
-					<button type="submit">Start</button>
-				</form>
-				<div class="results-container">
-					<table>
-						<thead>
-							<tr>
-								<th>Duration</th>
-								<th>Correct</th>
-								<th>Direction</th>
-								<th>Condition</th>
-								<th>Cue</th>
-							</tr>
-						</thead>
-						<tbody id="results">
-							{#each results as result}
-								<tr>
-									<td>{Math.floor(result.duration)} ms</td>
-									<td>{result.correct}</td>
-									<td>{result.state.targetDirection}</td>
-									<td>{result.state.targetCondition}</td>
-									<td>{result.hasCue}</td>
-								</tr>
-							{/each}
-						</tbody>
-					</table>
-				</div>
-			</div>
+<Heading class="leading-relaxed">Blink</Heading>
+<P>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet, eius.</P>
+{#if !isRunning}
+	<div class="flex justify-between mt-8 gap-8">
+		<form id="test-settings" on:submit|preventDefault={onSubmit} class="flex flex-col flex-1 gap-2">
+			<Heading tag="h3">Settings</Heading>
+			<Label for="cueDuration" defaultClass="w-full"
+				>Cue duration (ms)
+				<Input
+					bind:value={cueDuration}
+					id="cueDuration"
+					name="cueDuration"
+					type="number"
+					min="400"
+					step="100"
+					max="800"
+				/>
+			</Label>
+			<Label for="fixationDuration" defaultClass="w-full"
+				>Fixation duration (ms)
+				<Input
+					bind:value={fixationDuration}
+					id="fixationDuration"
+					name="fixationDuration"
+					type="number"
+					step="100"
+					min="400"
+					max="1600"
+				/>
+			</Label>
+			<Label for="testDuration" defaultClass="w-full"
+				>Test duration (ms)
+				<Input
+					bind:value={testDuration}
+					id="testDuration"
+					name="testDuration"
+					type="number"
+					step="100"
+					min="5000"
+					max="120000"
+				/></Label
+			>
+			<span class="flex gap-4">
+				<Label for="withCue">With cue</Label>
+				<Checkbox bind:checked={withCue} id="withCue" name="withCue" />
+			</span>
+		</form>
+		<div class="flex-1">
+			<table>
+				<thead>
+					<tr>
+						<th>Duration</th>
+						<th>Correct</th>
+						<th>Direction</th>
+						<th>Condition</th>
+						<th>Cue</th>
+					</tr>
+				</thead>
+				<tbody id="results">
+					{#each results as result}
+						<tr>
+							<td>{Math.floor(result.duration)} ms</td>
+							<td>{result.correct}</td>
+							<td>{result.state.targetDirection}</td>
+							<td>{result.state.targetCondition}</td>
+							<td>{result.hasCue}</td>
+						</tr>
+					{/each}
+				</tbody>
+			</table>
 		</div>
-	{/if}
-	<main>
-		<div id="top" class="target"></div>
-		<div id="center" class="target fixation"></div>
-		<div id="bottom" class="target"></div>
-	</main>
-</div>
+	</div>
+	<div class="flex justify-center mt-10">
+		<Button form="test-settings" type="submit">Start</Button>
+	</div>
+{:else}
+	<div class="main">
+		<div id="top" class="target" />
+		<div id="center" class="target fixation" />
+		<div id="bottom" class="target" />
+	</div>
+{/if}
 
 <style lang="scss">
-	.container {
-		margin: 0;
-		width: 100vw;
-		height: 100vh;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-	}
-
 	main {
 		border: 1px solid lightgray;
 		display: flex;
@@ -140,24 +134,20 @@
 		z-index: 1;
 	}
 
-	form {
-		width: 100%;
-		padding: 2rem;
-		display: flex;
-		flex-direction: column;
-		gap: 8px;
-		background-color: white;
-	}
+	// form {
+	// 	width: 100%;
+	// 	padding: 2rem;
+	// 	display: flex;
+	// 	flex-direction: column;
+	// 	gap: 8px;
+	// 	background-color: white;
+	// }
 
-	span {
-		display: flex;
-		gap: 1rem;
-		justify-content: space-between;
-	}
-
-	input {
-		width: 50px;
-	}
+	// span {
+	// 	display: flex;
+	// 	gap: 1rem;
+	// 	justify-content: space-between;
+	// }
 
 	.symbol {
 		font-size: 100px;

@@ -3,6 +3,8 @@
 		Button,
 		Navbar,
 		NavBrand,
+		NavUl,
+		NavLi,
 		NavHamburger,
 		Avatar,
 		Dropdown,
@@ -10,7 +12,9 @@
 		DropdownHeader
 	} from 'flowbite-svelte';
 	import checkIsLoggedIn from '$lib/auth/isLoggedIn';
+	import { page } from '$app/stores';
 
+	$: activeUrl = $page.url.pathname;
 	let isLoggedIn = checkIsLoggedIn();
 </script>
 
@@ -20,6 +24,10 @@
 			Psych Out
 		</span>
 	</NavBrand>
+	<NavUl {activeUrl}>
+		<NavLi href="/">Home</NavLi>
+		<NavLi href="/tests">Tests</NavLi>
+	</NavUl>
 	<div class="flex items-center md:order-2">
 		{#if isLoggedIn}
 			<Avatar id="avatar-menu" src="https://picsum.photos/50" />
