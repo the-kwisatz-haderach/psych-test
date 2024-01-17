@@ -46,7 +46,7 @@ func New(auth *authenticator.Authenticator) *gin.Engine {
 	router.GET("/login", controllers.HandleLogin(auth))
 	router.GET("/callback", controllers.HandleCallback(auth))
 	router.GET("/logout", controllers.HandleLogout)
-	router.GET("/user", middleware.IsAuthenticated, controllers.HandleUser)
+	router.GET("/api/user", middleware.IsAuthenticated, controllers.HandleUser)
 
 	router.NoRoute(func(ctx *gin.Context) {
 		r, err := regexp.Compile(`\.\w+$`)
