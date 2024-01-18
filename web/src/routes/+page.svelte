@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Heading, P, A } from 'flowbite-svelte';
+	import { Heading, A } from 'flowbite-svelte';
 	import CardGrid from '$lib/components/CardGrid/CardGrid.svelte';
 	import Header from '$lib/components/Header/Header.svelte';
 	import LinkIcon from 'flowbite-svelte-icons/ChevronRightSolid.svelte';
@@ -11,7 +11,7 @@
 	description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi nulla rem natus veritatis iusto dolor aut quidem exercitationem. Nemo, perspiciatis."
 />
 <section>
-	<header class="flex justify-between items-end mb-6">
+	<header class="mb-6 flex items-end justify-between">
 		<Heading class="w-fit" tag="h2">Tests</Heading>
 		<A aClass="inline-flex items-center font-medium hover:underline" href="/tests"
 			>View all <LinkIcon size="xs" class="ms-2" /></A

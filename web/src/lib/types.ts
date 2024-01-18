@@ -11,3 +11,12 @@ export type TestConfig = {
 	targetMaxTime?: number;
 	withCue?: boolean;
 };
+
+export type User = {
+	family_name: string;
+	given_name: string;
+	locale: string;
+	name: string;
+	nickname: string;
+	picture: string;
+};

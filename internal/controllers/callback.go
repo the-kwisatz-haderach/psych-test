@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"net/http"
+	"os"
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
@@ -43,7 +44,13 @@ func HandleCallback(auth *authenticator.Authenticator) gin.HandlerFunc {
 			return
 		}
 
+		redirectTo := "/"
+		url := os.Getenv("AUTH0_LOGOUT_REDIRECT_URL")
+		if url != "" {
+			redirectTo = url
+		}
+
 		// Redirect to logged in page.
-		ctx.Redirect(http.StatusTemporaryRedirect, "/")
+		ctx.Redirect(http.StatusTemporaryRedirect, redirectTo)
 	}
 }

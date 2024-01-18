@@ -17,7 +17,7 @@ func HandleLogout(ctx *gin.Context) {
 		return
 	}
 
-	returnTo := os.Getenv("AUTH0_LOGOUT_URL")
+	returnTo, err := getReturnTo(ctx)
 	if err != nil {
 		ctx.String(http.StatusInternalServerError, err.Error())
 		return
@@ -34,4 +34,20 @@ func HandleLogout(ctx *gin.Context) {
 	session.Save()
 
 	ctx.Redirect(http.StatusTemporaryRedirect, logoutUrl.String())
+}
+
+func getReturnTo(ctx *gin.Context) (string, error) {
+	returnTo := os.Getenv("AUTH0_LOGOUT_REDIRECT_URL")
+	if returnTo == "" {
+		scheme := "http"
+		if ctx.Request.TLS != nil {
+			scheme = "https"
+		}
+		returnToUrl, err := url.Parse(scheme + "://" + ctx.Request.Host)
+		if err != nil {
+			return "", err
+		}
+		returnTo = returnToUrl.String()
+	}
+	return returnTo, nil
 }
