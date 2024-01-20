@@ -20,3 +20,17 @@ export type User = {
 	nickname: string;
 	picture: string;
 };
+
+export type ANTTestResult = {
+	duration: number;
+	correct: boolean;
+	state: ANTTestState;
+};
+
+export type ANTTestState = {
+	positions: Extract<Cue, 'top' | 'bottom' | 'center'>[];
+	cue: Cue;
+	targetDirection: TargetDirection;
+	targetCondition: Condition;
+	hasCue: boolean;
+};

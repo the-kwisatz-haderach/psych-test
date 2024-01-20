@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Condition, TargetDirection } from '$lib/types';
+	import type { Condition, TargetDirection } from '$lib/tests/ant/types';
 
 	const symbols = {
 		ArrowRight: '→',

@@ -1,6 +1,14 @@
-import type { Cue } from './types';
+import type { Cue } from '../tests/ant/types';
 
-export const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+export const abortable = <T extends (...args: never[]) => Promise<unknown>>(
+	fn: T,
+	signal: AbortSignal
+): T => <T>function (...args: Parameters<T>) {
+		if (signal.aborted) {
+			return Promise.reject('aborted');
+		}
+		return fn(...args);
+	};
 
 export const determineElementPosition = (cue: Cue = 'none') => {
 	const elements: Extract<Cue, 'top' | 'bottom' | 'center'>[] = [];

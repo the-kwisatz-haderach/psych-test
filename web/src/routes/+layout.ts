@@ -1,5 +1,5 @@
 import isLoggedIn from '$lib/auth/isLoggedIn.js';
-import type { User } from '$lib/types.js';
+import type { User } from '$lib/tests/ant/types.js';
 
 // This can be false if you're using a fallback (i.e. SPA mode)
 export const prerender = true;
