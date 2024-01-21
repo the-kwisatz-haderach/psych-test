@@ -21,6 +21,7 @@
 	import { setupListener, abortable } from '$lib/utils/helpers';
 	import w from '$lib/utils/wait';
 	import type { ANTTestResult, ANTTestState } from '$lib/tests/ant/types';
+	import { createCountdownHandler } from '$lib/stores/createCountdownHandler';
 
 	let cueDuration = '400';
 	let soaDuration = '400';
@@ -34,7 +35,6 @@
 	let sessionResults: ANTTestResult[] = [];
 	let controller = new AbortController();
 	let runningTime = 0;
-	let count = 3;
 
 	let state: ANTTestState = {
 		positions: [],
@@ -44,17 +44,7 @@
 		cue: 'none'
 	};
 
-	const countDown = (signal?: AbortSignal) =>
-		new Promise<void>((resolve) => {
-			let interval: number;
-			interval = setInterval(() => {
-				count -= 1;
-				if (count < 0 || signal?.aborted) {
-					clearInterval(interval);
-					resolve();
-				}
-			}, 1000);
-		});
+	const { count, run } = createCountdownHandler(3);
 
 	const onSubmit = async () => {
 		await tick(); // Wait for DOM to update before initialization.
@@ -64,7 +54,7 @@
 		isRunning = true;
 		runningTime = 0;
 
-		await countDown();
+		await run(controller.signal);
 
 		const generateState = createStateGenerator(Number.parseInt(testDurationSec) * 1000);
 
@@ -185,9 +175,9 @@
 
 <TestContainer onClose={controller.abort.bind(controller)} bind:open={isRunning}>
 	<div class="main" class:show>
-		{#if count > 0}
+		{#if $count > 0}
 			<div class="absolute inset-0 z-10 flex items-center justify-center bg-white text-9xl">
-				{count}
+				{$count}
 			</div>
 		{/if}
 		<div class="target">
