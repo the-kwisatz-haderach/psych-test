@@ -7,7 +7,7 @@ export type Item = {
 export const tests: Item[] = [
 	{
 		title: 'ANT',
-		href: '/tests/ant',
+		href: '/tests/attention-network-test',
 		description:
 			'Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias, ab! Lorem ipsum dolor sitamet.'
 	}

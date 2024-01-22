@@ -1,15 +1,15 @@
-export type Cue = 'none' | 'double' | 'top' | 'bottom' | 'center';
-export type CueDirection = 'top' | 'bottom' | 'double';
+export type Cue = 'none' | 'double' | 'spatial' | 'center';
 export type TargetDirection = 'ArrowLeft' | 'ArrowRight';
-export type Condition = 'congruent' | 'incongruent' | 'neutral';
+export type TargetCondition = 'congruent' | 'incongruent' | 'neutral';
+export type TargetPosition = 'top' | 'bottom';
+export type TestPhase = 'fixation' | 'cue' | 'intermediate-fixation' | 'target';
 
 export type TestConfig = {
-	cueDuration?: number;
-	soaDuration?: number;
-	fixationDuration?: number;
-	testDuration?: number;
-	targetMaxTime?: number;
-	withCue?: boolean;
+	cueDuration: number;
+	fixationDuration: number;
+	testDuration: number;
+	targetMaxTime: number;
+	intermediateFixationDuration: number;
 };
 
 export type User = {
@@ -28,9 +28,9 @@ export type ANTTestResult = {
 };
 
 export type ANTTestState = {
-	positions: Extract<Cue, 'top' | 'bottom' | 'center'>[];
+	phase: TestPhase;
 	cue: Cue;
+	targetPosition: TargetPosition;
 	targetDirection: TargetDirection;
-	targetCondition: Condition;
-	hasCue: boolean;
+	targetCondition: TargetCondition;
 };

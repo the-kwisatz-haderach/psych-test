@@ -21,7 +21,7 @@
 				.slice(1)
 				.split('/')
 				.map((p, i, arr) => ({
-					title: p.replace('-', ' '),
+					title: p.replaceAll('-', ' '),
 					href: '/' + arr.slice(0, i + 1).join('/')
 				}))
 		];
@@ -31,8 +31,8 @@
 <Breadcrumb aria-label="breadcrumbs" navClass="flex h-6 container mx-auto my-4">
 	{#each breadcrumbs as crumb}
 		<BreadcrumbItem
-			spanClass="ms-1 text-sm font-medium text-gray-500 md:ms-2 capitalize-first"
-			linkClass="ms-1 text-sm font-medium text-gray-700 hover:text-gray-900 md:ms-2 capitalize-first"
+			spanClass="ms-1 text-sm font-medium text-gray-500 md:ms-2 capitalize"
+			linkClass="ms-1 text-sm font-medium text-gray-700 hover:text-gray-900 md:ms-2 capitalize"
 			href={crumb.href === currentPath ? undefined : crumb.href}
 			home={crumb.href === '/'}>{crumb.title}</BreadcrumbItem
 		>
