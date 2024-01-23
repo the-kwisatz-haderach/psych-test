@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/joho/godotenv"
 	"github.com/the-kwisatz-haderach/psych-test/m/internal/authenticator"
@@ -15,7 +16,7 @@ import (
 const port = 8000
 
 func main() {
-	if err := godotenv.Load(".env"); err != nil {
+	if err := godotenv.Load(".env"); err != nil && os.Getenv("dev") == "true" {
 		log.Fatalf("Failed to load the env vars: %v", err)
 	}
 

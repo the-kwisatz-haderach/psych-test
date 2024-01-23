@@ -40,7 +40,7 @@ func getReturnTo(ctx *gin.Context) (string, error) {
 	returnTo := os.Getenv("AUTH0_LOGOUT_REDIRECT_URL")
 	if returnTo == "" {
 		scheme := "http"
-		if ctx.Request.TLS != nil {
+		if ctx.Request.TLS != nil || ctx.Request.Header.Get("X-Forwarded-Proto") == "https" {
 			scheme = "https"
 		}
 		returnToUrl, err := url.Parse(scheme + "://" + ctx.Request.Host)
