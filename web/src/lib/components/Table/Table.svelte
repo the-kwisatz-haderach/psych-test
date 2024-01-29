@@ -12,12 +12,35 @@
 
 	export let columns: Record<string, Column> = {};
 	export let rows: Record<string, Cell>[] = [];
+	let sortBy = '';
+	let sortAsc = false;
+
+	const onClickHeadCell = (columnId: string) => {
+		if (sortBy === columnId) {
+			sortAsc = !sortAsc;
+		} else {
+			sortBy = columnId;
+		}
+	};
+
+	$: rows = rows.sort((a, b) => {
+		if (!(sortBy in a && sortBy in b)) return 0;
+		let sortValue = 0;
+		if (a[sortBy].value > b[sortBy].value) {
+			sortValue = -1;
+		} else if (a[sortBy].value < b[sortBy].value) {
+			sortValue = 1;
+		}
+		return sortValue * (sortAsc ? 1 : -1);
+	});
 </script>
 
 <Table striped divClass="relative overflow-x-auto border">
 	<TableHead theadClass="text-xs uppercase bg-gray-200">
-		{#each Object.values(columns) as column}
-			<TableHeadCell>{column.title}</TableHeadCell>
+		{#each Object.keys(columns) as columnId}
+			<TableHeadCell class="cursor-pointer" on:click={() => onClickHeadCell(columnId)}
+				>{columns[columnId].title}</TableHeadCell
+			>
 		{/each}
 	</TableHead>
 	<TableBody>

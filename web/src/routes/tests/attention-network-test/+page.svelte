@@ -1,6 +1,16 @@
 <script lang="ts">
-	import { Button, Heading, P, Tabs, TabItem, GradientButton } from 'flowbite-svelte';
+	import {
+		Button,
+		Heading,
+		P,
+		Tabs,
+		TabItem,
+		GradientButton,
+		Accordion,
+		AccordionItem
+	} from 'flowbite-svelte';
 	import SettingsIcon from 'flowbite-svelte-icons/CogOutline.svelte';
+	import StartIcon from 'flowbite-svelte-icons/CaretRightSolid.svelte';
 	import TestContainer from '$lib/components/TestContainer/TestContainer.svelte';
 	import { createStateGenerator } from '$lib/tests/ant/createStateGenerator';
 	import { pushState } from '$app/navigation';
@@ -8,12 +18,7 @@
 	import { tick } from 'svelte';
 	import { setupListener, abortable } from '$lib/utils/helpers';
 	import w from '$lib/utils/wait';
-	import {
-		analyseTestResults,
-		type ANTTestResult,
-		type ANTTestState,
-		type TestConfig
-	} from '$lib/tests/ant/types';
+	import { type ANTTestResult, type ANTTestState, type TestConfig } from '$lib/tests/ant/types';
 	import { createCountdownHandler } from '$lib/stores/createCountdownHandler';
 	import Display from './Display.svelte';
 	import SettingsForm from './SettingsForm.svelte';
@@ -21,6 +26,7 @@
 	import Table from '$lib/components/Table/Table.svelte';
 	import { createTable } from '$lib/components/Table/createTable';
 	import { browser } from '$app/environment';
+	import { analyseTestResults } from '$lib/tests/ant/analyseTestResults';
 
 	let testConfig: TestConfig = {
 		cueDuration: 100,
@@ -189,23 +195,26 @@
 		title="Results"
 		open={tab === 'results'}
 	>
-		{#if testAnalysis.alerting > 0}
-			<div class="my-4 flex gap-2">
-				<div class="flex w-fit flex-col items-center justify-center rounded-md border p-4">
-					<Heading tag="h6">Alerting</Heading>
-					<P>{Math.floor(testAnalysis.alerting)}</P>
-				</div>
-				<div class="flex w-fit flex-col items-center justify-center rounded-md border p-4">
-					<Heading tag="h6">Orienting</Heading>
-					<P>{Math.floor(testAnalysis.orienting)}</P>
-				</div>
-				<div class="flex w-fit flex-col items-center justify-center rounded-md border p-4">
-					<Heading tag="h6">Executive</Heading>
-					<P>{Math.floor(testAnalysis.executiveAttention)}</P>
-				</div>
+		<div class="my-4 flex gap-2">
+			<div class="flex w-fit flex-col items-center justify-center rounded-md border p-4">
+				<Heading tag="h6">Alerting</Heading>
+				<P>{Math.floor(testAnalysis.alerting)}</P>
 			</div>
-		{/if}
-		<Table columns={table.columns} rows={table.rows} />
+			<div class="flex w-fit flex-col items-center justify-center rounded-md border p-4">
+				<Heading tag="h6">Orienting</Heading>
+				<P>{Math.floor(testAnalysis.orienting)}</P>
+			</div>
+			<div class="flex w-fit flex-col items-center justify-center rounded-md border p-4">
+				<Heading tag="h6">Executive</Heading>
+				<P>{Math.floor(testAnalysis.executiveAttention)}</P>
+			</div>
+		</div>
+		<Accordion flush>
+			<AccordionItem>
+				<P slot="header">Full results</P>
+				<Table columns={table.columns} rows={table.rows} />
+			</AccordionItem>
+		</Accordion>
 	</TabItem>
 	<li class="flex flex-1 items-start justify-end gap-2">
 		<Drawer bind:hidden={hideSettings} title="Settings">
@@ -214,7 +223,9 @@
 			>
 			<SettingsForm onSubmit={handleUpdateSettings} defaultValues={testConfig} />
 		</Drawer>
-		<GradientButton color="green" on:click={handleStartTestRun}>Start test run</GradientButton>
+		<GradientButton color="green" on:click={handleStartTestRun}
+			>Start trial <StartIcon class="ml-2" size="xs" /></GradientButton
+		>
 	</li>
 </Tabs>
 
