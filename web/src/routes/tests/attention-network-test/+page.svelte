@@ -200,7 +200,7 @@
 					<P>{Math.floor(testAnalysis.orienting)}</P>
 				</div>
 				<div class="flex w-fit flex-col items-center justify-center rounded-md border p-4">
-					<Heading tag="h6">Attention</Heading>
+					<Heading tag="h6">Executive</Heading>
 					<P>{Math.floor(testAnalysis.executiveAttention)}</P>
 				</div>
 			</div>

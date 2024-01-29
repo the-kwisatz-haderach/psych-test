@@ -32,13 +32,13 @@
 	{:else if state.phase === 'target'}
 		<div class="target">
 			{#if state.targetPosition === 'top'}
-				<Target direction={state.targetDirection} />
+				<Target direction={state.targetDirection} condition={state.targetCondition} />
 			{/if}
 		</div>
 		<div class="target" />
 		<div class="target">
 			{#if state.targetPosition === 'bottom'}
-				<Target direction={state.targetDirection} />
+				<Target direction={state.targetDirection} condition={state.targetCondition} />
 			{/if}
 		</div>
 	{/if}
