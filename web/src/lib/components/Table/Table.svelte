@@ -1,5 +1,9 @@
 <script lang="ts">
-	import { CheckSolid as CheckMark, CloseSolid as Cross } from 'flowbite-svelte-icons';
+	import {
+		CheckSolid as CheckMark,
+		CloseSolid as Cross,
+		CaretDownSolid
+	} from 'flowbite-svelte-icons';
 	import {
 		Table,
 		TableBody,
@@ -12,18 +16,21 @@
 
 	export let columns: Record<string, Column> = {};
 	export let rows: Record<string, Cell>[] = [];
-	let sortBy = '';
-	let sortAsc = false;
+	export let sortBy = '';
+	export let sortAsc = false;
 
 	const onClickHeadCell = (columnId: string) => {
 		if (sortBy === columnId) {
+			if (!sortAsc) {
+				sortBy = '';
+			}
 			sortAsc = !sortAsc;
 		} else {
 			sortBy = columnId;
 		}
 	};
 
-	$: rows = rows.sort((a, b) => {
+	$: sorter = (a: Record<string, Cell>, b: Record<string, Cell>) => {
 		if (!(sortBy in a && sortBy in b)) return 0;
 		let sortValue = 0;
 		if (a[sortBy].value > b[sortBy].value) {
@@ -32,19 +39,27 @@
 			sortValue = 1;
 		}
 		return sortValue * (sortAsc ? 1 : -1);
-	});
+	};
 </script>
 
 <Table striped divClass="relative overflow-x-auto border">
 	<TableHead theadClass="text-xs uppercase bg-gray-200">
 		{#each Object.keys(columns) as columnId}
-			<TableHeadCell class="cursor-pointer" on:click={() => onClickHeadCell(columnId)}
-				>{columns[columnId].title}</TableHeadCell
-			>
+			<TableHeadCell on:click={() => onClickHeadCell(columnId)}>
+				<span class="relative inline-flex cursor-pointer gap-2"
+					>{columns[columnId].title}
+					{#if sortBy === columnId}
+						<CaretDownSolid
+							class={`absolute -right-5 top-px ${!sortAsc ? 'rotate-180' : ''}`}
+							size="xs"
+						/>
+					{/if}
+				</span>
+			</TableHeadCell>
 		{/each}
 	</TableHead>
 	<TableBody>
-		{#each rows as row}
+		{#each [...rows].sort(sorter) as row}
 			<TableBodyRow>
 				{#each Object.keys(columns) as columnId}
 					<TableBodyCell>
