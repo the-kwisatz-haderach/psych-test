@@ -1,26 +1,11 @@
-import type {
-	TargetCondition,
-	Cue,
-	TargetDirection,
-	ANTTestState,
-	TargetPosition,
-	TestPhase
+import {
+	type ANTTestState,
+	cues,
+	targetPositions,
+	targetDirections,
+	targetConditions,
+	phases
 } from './types';
-
-const phases = [
-	'fixation',
-	'cue',
-	'intermediate-fixation',
-	'target'
-] as const satisfies TestPhase[];
-const targetPositions = ['top', 'bottom'] as const satisfies TargetPosition[];
-const cues = ['none', 'double', 'center', 'spatial'] as const satisfies Cue[];
-const targetDirections = ['ArrowLeft', 'ArrowRight'] as const satisfies TargetDirection[];
-const targetConditions = [
-	'congruent',
-	'incongruent',
-	'neutral'
-] as const satisfies TargetCondition[];
 
 const createState = (): Omit<ANTTestState, 'phase'> => {
 	const cue = cues[Math.floor(Math.random() * cues.length)];

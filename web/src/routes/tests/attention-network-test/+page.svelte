@@ -27,6 +27,11 @@
 	import { createTable } from '$lib/components/Table/createTable';
 	import { browser } from '$app/environment';
 	import { analyseTestResults } from '$lib/tests/ant/analyseTestResults';
+	import {
+		createErrorRateAnalysisTable,
+		createResponseTimeAnalysisTable,
+		createResultsTable
+	} from '$lib/tests/ant/createResultsTable';
 
 	let testConfig: TestConfig = {
 		cueDuration: 100,
@@ -95,9 +100,9 @@
 						results = [
 							...results,
 							{
+								...state,
 								duration: Math.min(end - start, testConfig.targetMaxTime),
-								correct: key === state.targetDirection,
-								state
+								correct: key === state.targetDirection
 							}
 						];
 						break;
@@ -113,49 +118,9 @@
 		sessionStorage.setItem('ant-results', JSON.stringify(sessionResults));
 	};
 
-	$: table = createTable(
-		{
-			correct: {
-				title: 'Status',
-				type: 'boolean'
-			},
-			duration: {
-				title: 'Response time (ms)'
-			},
-			cue: {
-				title: 'Cue'
-			},
-			condition: {
-				title: 'Condition'
-			},
-			direction: {
-				title: 'Direction'
-			},
-			position: {
-				title: 'Position'
-			}
-		},
-		sessionResults.map(({ correct, duration, state }) => ({
-			correct: {
-				value: correct
-			},
-			duration: {
-				value: Math.floor(duration)
-			},
-			cue: {
-				value: state.cue
-			},
-			condition: {
-				value: state.targetCondition
-			},
-			direction: {
-				value: state.targetDirection
-			},
-			position: {
-				value: state.targetPosition
-			}
-		}))
-	);
+	$: resultsTable = createResultsTable(sessionResults);
+	$: responseTimeAnalysisTable = createResponseTimeAnalysisTable(testAnalysis);
+	$: errorRateAnalysisTable = createErrorRateAnalysisTable(testAnalysis);
 </script>
 
 <Heading class="leading-relaxed">Attention Network Test</Heading>
@@ -209,10 +174,14 @@
 				<P>{Math.floor(testAnalysis.executiveAttention)}</P>
 			</div>
 		</div>
+		<P class="mb-2 mt-4">Mean response times (msec) and standard deviations</P>
+		<Table columns={responseTimeAnalysisTable.columns} rows={responseTimeAnalysisTable.rows} />
+		<P class="mb-2 mt-4">Error rate (%) and standard deviations</P>
+		<Table columns={errorRateAnalysisTable.columns} rows={errorRateAnalysisTable.rows} />
 		<Accordion flush>
 			<AccordionItem>
-				<P slot="header">Full results</P>
-				<Table columns={table.columns} rows={table.rows} />
+				<P slot="header">Session log</P>
+				<Table columns={resultsTable.columns} rows={resultsTable.rows} />
 			</AccordionItem>
 		</Accordion>
 	</TabItem>

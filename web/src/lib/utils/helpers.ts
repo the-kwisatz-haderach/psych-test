@@ -9,12 +9,13 @@ export const abortable = <T extends (...args: never[]) => Promise<unknown>>(
 	};
 
 export function setupListener() {
-	return new Promise((resolve) => {
+	return new Promise<'ArrowLeft' | 'ArrowRight' | ''>((resolve) => {
 		document.addEventListener('keydown', function handleKeypress(e) {
 			if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
 				document.removeEventListener('keydown', handleKeypress);
 				resolve(e.key);
 			}
+			resolve('');
 		});
 	});
 }
