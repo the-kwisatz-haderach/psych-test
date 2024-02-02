@@ -1,9 +1,9 @@
 terraform {
   backend "gcs" {
     bucket = "a22fea2f9857fc71-bucket-tfstate"
-    prefix    = "terraform/state"
+    prefix = "terraform/state"
   }
-  
+
   required_providers {
     google = {
       source  = "hashicorp/google"
@@ -22,6 +22,11 @@ provider "google" {
 resource "google_service_account" "terraform" {
   account_id   = "tf-admin"
   display_name = "A service account allowing terraform to manage cloud resources"
+}
+
+resource "google_service_account" "cloud_run_invoker" {
+  account_id  = "cloud-run-invoker"
+  description = "Run cloud run service"
 }
 
 resource "google_project_iam_member" "default" {
